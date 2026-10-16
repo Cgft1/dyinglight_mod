@@ -28,6 +28,7 @@ jobs:
           gradle-version: '8.6'
       - name: Build mod
         run: |
+          chmod +x gradlew
           set +e
           ./gradlew build --no-daemon --stacktrace > build.log 2>&1
           result=$?
