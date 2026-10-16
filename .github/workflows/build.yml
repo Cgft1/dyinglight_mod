@@ -27,8 +27,21 @@ jobs:
         with:
           gradle-version: '8.6'
       - name: Build mod
-        run: gradle build --no-daemon
+        run: |
+          set +e
+          ./gradlew build --no-daemon --stacktrace > build.log 2>&1
+          result=$?
+          tail -n 250 build.log
+          exit $result
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dyinglight-build-log
+          path: build.log
+          if-no-files-found: ignore
       - name: Upload JAR files
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: dyinglight-fabric-1.20.1
