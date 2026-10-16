@@ -1,0 +1,43 @@
+name: Build Dying Light Fabric Mod
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'DyingLightMod-1.20.1-Fabric-GitHub-ready.zip'
+      - '.github/workflows/build.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Extract source archive
+        run: |
+          test -f DyingLightMod-1.20.1-Fabric-GitHub-ready.zip
+          unzip -q DyingLightMod-1.20.1-Fabric-GitHub-ready.zip -d source
+          test -f source/dyinglight_mod/build.gradle
+
+      - name: Build mod
+        working-directory: source/dyinglight_mod
+        run: |
+          gradle --version
+          gradle build --no-daemon
+
+      - name: Upload JAR files
+        uses: actions/upload-artifact@v4
+        with:
+          name: dyinglight-fabric-1.20.1
+          path: source/dyinglight_mod/build/libs/*.jar
+          if-no-files-found: error
