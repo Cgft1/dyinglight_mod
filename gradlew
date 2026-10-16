@@ -3,7 +3,7 @@ set -eu
 APP_HOME=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 GRADLE_VERSION=8.6
 GRADLE_USER_HOME=${GRADLE_USER_HOME:-"$HOME/.gradle"}
-DIST_DIR="$GRADLE_USER_HOME/manual-dists/gradle-$GRADLE_VERSION"
+DIST_DIR="$GRADLE_USER_HOME/manual-dists"
 GRADLE_BIN="$DIST_DIR/gradle-$GRADLE_VERSION/bin/gradle"
 if [ ! -x "$GRADLE_BIN" ]; then
   mkdir -p "$GRADLE_USER_HOME/manual-dists"
